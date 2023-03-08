@@ -1,59 +1,82 @@
 
 class Productos {
-    constructor(nombre,precio,cantidad){
+    constructor(id,nombre,precio,cantidad,img){
+        this.id=id,
         this.name=nombre;
         this.price=precio;
         this.stock=cantidad;
+        this.img=img
     }
 }
 const Stock = [
-    new Productos ("botas",400,1),
-    new Productos ("sandalias",300,0),
-    new Productos ("bolso",1000,2),
-    new Productos ("brazalete",500,1)
+    new Productos (0,"botas",400,1,"botas.PNG"),
+    new Productos (1,"sandalias",300,0,"sandalias.PNG"),
+    new Productos (2,"bolso",1000,2,"bolso.PNG"),
+    new Productos (3,"brazalete",500,1,"brazalete.PNG")
 ]
-
-const costo = [];
 const carrito = [];
 
 
-funcion = ()=>{
-    let mensaje = ""
-    for(let p of Stock){mensaje += `- ${p.name} (${p.stock} disponibles) - ${p.price}$ la unidad\n`}
-    alert(`Hola, a continuacion te mostramos nuestra lista de productos:\n\n${mensaje}`)
-    
-    while(true){  
-        let seleccion = prompt("Que producto quiere agregar al carrito?");    
-        for(let h = 0;h < Stock.length;h++){  
-            if(Stock[h].name == seleccion && Stock[h].stock > 0){
-                switch(seleccion){
-                    case Stock[h].name:
-                    carrito.push(Stock[h].name);
-                    costo.push(Stock[h].price)
-                    costoTotal = costo.reduce((acc, p)=> acc + p, 0);
-                    alert(`Su producto: ${seleccion}, se agrego correctamente al carrito.`);
-                    break
-                }
-                repetir = prompt("¿Desea agregar otro producto al carro?");
-                if(repetir == "si" || repetir == "SI"){
-                    true
-                }
-                else if(repetir == "no" || repetir == "NO"){
-                    carrito.join(" - ")
-                    document.write(`Su carrito de compras tiene los siguientes productos:<b style=color:red>${carrito}</b>.<br>
-                    El precio total es de: <b style=color:blue>${costoTotal}$</b>`)
-                    break
-                }                      
-            }
-            else if(Stock[h].name == seleccion && Stock[h].stock == 0){
-                alert("No hay mas stock de este producto") 
-            }         
-        }
-        if(repetir == "no" || repetir == "NO"){
-            break
-        }
+for (elem of Stock){
+    let card = document.createElement("div");
+    card.innerHTML = `<div class="card text-center border-success mb-3 " style="width: 18rem;">
+        <img class="card-img-top mt-2" src="./assets/img/${elem.img}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">${elem.name}</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <input type="button" onclick="agregaCarrito(${elem.id})" class="btn btn-primary bg-success mb-3" value="Comprar">
+        </div>
+        </div>`;
+    document.body.append(card)
+}
+
+class ObjCarrito {
+    constructor(producto,cant){
+        this.producto=producto,
+        this.cantidad=cant;
+    }
+    sumaStock(){
+        this.cantidad =  this.cantidad + 1
+    }
+}
+function agregaCarrito(prod){
+    let existeEnCarrito = carrito.find(e => e.producto == prod);
+    if(existeEnCarrito != undefined){
+        let posicion = carrito.findIndex(elem => elem.producto == existeEnCarrito.producto);
+        carrito[posicion].sumaStock()
+        console.table(carrito)
+
+    }
+    else{
+        const alCarrito = new ObjCarrito (prod, 1);
+        carrito.push(alCarrito);
+        console.table(carrito)
     }
 }
 
-funcion();
+
+
+function verCarrito(){
+    document.body.innerHTML="";
+    for(item of carrito){
+        let card = document.createElement("div");
+        let datosProd = Stock.find(elem => elem.id == item.producto);
+        card.innerHTML=`<div class="card text-center" style="width: 18rem;">
+                <img class="card-img-top" src="./assets/img/${datosProd.img}" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">${datosProd.name}</h5>
+                <p class="card-text">Te llevas ${item.cantidad}</p>
+                </div>
+                </div>`
+        document.body.append(card)
+    }
+    const carroJson = JSON.stringify(carrito)
+    console.log(carroJson)
+    localStorage.setItem("carrito",carroJson)
+    
+
+}
+
+
+
 
