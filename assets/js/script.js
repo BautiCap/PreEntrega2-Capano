@@ -73,8 +73,6 @@ function verCarrito(){
     const carroJson = JSON.stringify(carrito)
     console.log(carroJson)
     localStorage.setItem("carrito",carroJson)
-    
-
 }
 
 
