@@ -9,70 +9,85 @@ class Productos {
     }
 }
 const Stock = [
-    new Productos (0,"botas",400,1,"botas.PNG"),
-    new Productos (1,"sandalias",300,0,"sandalias.PNG"),
-    new Productos (2,"bolso",1000,2,"bolso.PNG"),
-    new Productos (3,"brazalete",500,1,"brazalete.PNG")
+    new Productos (0,"Botas",400,10,"botas.PNG"),
+    new Productos (1,"Sandalias",300,20,"sandalias.PNG"),
+    new Productos (2,"Bolso",1000,5,"bolso.PNG"),
+    new Productos (3,"Brazalete",500,30,"brazalete.PNG")
 ]
-const carrito = [];
 
+let carrito = [];
+
+const contenedor = document.querySelector("#contenedor")
+
+document.addEventListener("DOMContentLoaded", () => {
+    carrito = JSON.parse(localStorage.getItem("carrito")) || []
+    verCarrito()
+});
+    
 
 for (elem of Stock){
-    let card = document.createElement("div");
-    card.innerHTML = `<div class="card text-center border-success mb-3 " style="width: 18rem;">
-        <img class="card-img-top mt-2" src="./assets/img/${elem.img}" alt="Card image cap">
-        <div class="card-body">
-        <h5 class="card-title">${elem.name}</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <input type="button" onclick="agregaCarrito(${elem.id})" class="btn btn-primary bg-success mb-3" value="Comprar">
+    const {name,price,stock,id,img}= elem;
+    contenedor.innerHTML += `
+    <div class="card text-center" style="width: 18rem">
+    <img class="card-img-top mt-2 img-responsive" src="./assets/img/${img}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">${name}</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <p class="card-text">${price}$</p>
+      <a onclick="agregaCarrito(${id})" class="btn btn-primary">Agregar al carrito(${stock})</a>
+    </div>
+    </div>`;    
+}
+
+ agregaCarrito = (id) =>{
+    const prod = Stock.find((item) => item.id === id)
+    carrito.push(prod);
+    console.table(carrito)
+    swal({
+        text:`Agregado al carrito`,
+        icon:"success",
+        button:false,
+        timer:1000,
+    });
+    verCarrito();
+}
+
+
+
+
+const verCarrito = () =>{
+    const mostrar = document.querySelector(`.modal .modal-body`);
+    mostrar.innerHTML = ""
+    for (prod of carrito){
+        const {id,name,stock,price,img} = prod;
+        mostrar.innerHTML += `<div class="col" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="./assets/img/${img}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">${name}</h5>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <p>Cantidad :${stock}</p>
+              <p>Precio: ${price}</p>
+              <button onclick="eliminarProducto(${id})" class="btn btn-danger">Eliminar producto</button>  
+            </div>
+          </div>
         </div>
-        </div>`;
-    document.body.append(card)
+      </div>`;
+    }
+    guardarStorage()
 }
 
-class ObjCarrito {
-    constructor(producto,cant){
-        this.producto=producto,
-        this.cantidad=cant;
-    }
-    sumaStock(){
-        this.cantidad =  this.cantidad + 1
-    }
-}
-function agregaCarrito(prod){
-    let existeEnCarrito = carrito.find(e => e.producto == prod);
-    if(existeEnCarrito != undefined){
-        let posicion = carrito.findIndex(elem => elem.producto == existeEnCarrito.producto);
-        carrito[posicion].sumaStock()
-        console.table(carrito)
-
-    }
-    else{
-        const alCarrito = new ObjCarrito (prod, 1);
-        carrito.push(alCarrito);
-        console.table(carrito)
-    }
+function eliminarProducto(id){
+    const juegoId = id;
+    carrito = carrito.filter((juego)=> juego.id !== juegoId)
+    verCarrito();
 }
 
-
-
-function verCarrito(){
-    document.body.innerHTML="";
-    for(item of carrito){
-        let card = document.createElement("div");
-        let datosProd = Stock.find(elem => elem.id == item.producto);
-        card.innerHTML=`<div class="card text-center" style="width: 18rem;">
-                <img class="card-img-top" src="./assets/img/${datosProd.img}" alt="Card image cap">
-                <div class="card-body">
-                <h5 class="card-title">${datosProd.name}</h5>
-                <p class="card-text">Te llevas ${item.cantidad}</p>
-                </div>
-                </div>`
-        document.body.append(card)
-    }
-    const carroJson = JSON.stringify(carrito)
-    console.log(carroJson)
-    localStorage.setItem("carrito",carroJson)
+function guardarStorage(){
+    localStorage.setItem("carrito", JSON.stringify(carrito))
 }
 
 
