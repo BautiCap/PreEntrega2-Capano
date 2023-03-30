@@ -1,0 +1,24 @@
+
+.navbar{
+    background-color: #F7C1C1;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.35); 
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.35);
+    width:100% ;
+}
+
+.modal{
+    animation:modal 0.4s; 
+} 
+@keyframes modal{ 
+    0%{transform:scale(.5)} 100%{transform:scale(1)} 
+}
+
+body{
+    height: 100%;
+    background-color: #ececec;
+}
+.fa-brands{
+    font-size: 25px;
+    color: white;
+}
+
