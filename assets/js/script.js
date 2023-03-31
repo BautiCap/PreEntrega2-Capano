@@ -19,26 +19,17 @@ const Stock = [
     new Productos (5,"Zapatilla",1200,30,0,"zapatilla.PNG")
 ]
 
-
-
 const contenedor = document.querySelector("#contenedor");
 const vaciarCarrito = document.querySelector("#vaciarCarrito");
 const precioTotal = document.querySelector("#precioTotal");
 const mostrar = document.querySelector(`.modal .modal-body`);
 const procesarCompra = document.querySelector(`#procesarCompra`);
-const totalProceso = document.querySelector(`#totalProceso`);
-
 
 document.addEventListener("DOMContentLoaded", () => {
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    if(procesarPedido){
-        procesarPedido()
-    }
     verCarrito();
 });
 
-
-if(contenedor){
 for (elem of Stock){
     const {name,price,id,img,cantidad}= elem;
     contenedor.innerHTML += `
@@ -54,7 +45,6 @@ for (elem of Stock){
     </div>
     </div>
     `;    
-}
 }
 
 agregaCarrito = (id) =>{
@@ -117,41 +107,22 @@ function eliminarProducto(id){
     verCarrito();
 }
 
-
-if(vaciarCarrito){
 vaciarCarrito.addEventListener("click", () =>{
     carrito = [];   
     verCarrito()
 })
-}
 
-if(procesarCompra){
+
 procesarCompra.addEventListener("click",()=>{
     carrito.length === 0 ? swal("¡Tu carrito esta vacio!", "Agrega algo para continuar", "error") : location.href = "assets/pages/compra.html"; 
-    listaCompra.innerHTML = "";
 })
-}
 
 function guardarStorage(){
     localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
 
-function procesarPedido(){
-    carrito.forEach((prod) => {
-        const listaCompra = document.querySelector("#listaFinal");
-        const {id,name,price} = prod;
-        listaCompra.innerHTML += `
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-                <h6 class="my-0">${name}</h6>
-                <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">${price}$</span>
-        </li>`;
-    });
-    totalProceso.textContent = carrito.reduce((acc,prod) => acc + prod.price * prod.cantidad, 0) + "$";
-}
+
 
 
 
