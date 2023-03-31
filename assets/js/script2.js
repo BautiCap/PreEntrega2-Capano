@@ -19,5 +19,5 @@ function procesarPedido(){
             <span class="text-muted">${price}$</span>
         </li>`;
     });
-    totalProceso.textContent = carrito.reduce((acc,prod) => acc + prod.price * prod.cantidad, 0) + "$";
+    totalProceso.textContent = carrito.reduce((acc,prod) => acc + prod.price * prod.cantidad, 0) + "$"
 }
