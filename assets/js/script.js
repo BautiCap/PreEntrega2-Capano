@@ -15,8 +15,8 @@ const Stock = [
     new Productos (1,"Sandalias",300,20,0,"sandalias.PNG"),
     new Productos (2,"Bolso",1000,5,0,"bolso.PNG"),
     new Productos (3,"Brazalete",500,30,0,"brazalete.PNG"),
-    new Productos (4,"Collar",650,30,0,"collar.PNG"),
-    new Productos (5,"Zapatilla",1200,30,0,"zapatilla.PNG")
+    new Productos (4,"Collar",650,30,0,"collar2.PNG"),
+    new Productos (5,"Zapatilla",1200,30,0,"zapatilla2.PNG")
 ]
 
 const contenedor = document.querySelector("#contenedor");
